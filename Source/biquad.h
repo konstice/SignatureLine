@@ -33,21 +33,22 @@ public:
     float float_pi = juce::MathConstants<float>::pi;
     float tau = 2 * float_pi;
 
-    BiQuad(void)
+    BiQuad(void):
+        in_z1 = 0,
+        in_z2 = 0,
+        out_z1 = 0,
+        out_z2 = 0,
+        q = 0.707,
+        freqc = 100,
+        type = 0,
+        fs = 44100,
+        a0 = 1,
+        a1 = 0,
+        a2 = 0,
+        b1 = 0,
+        b2 = 0
     {
-        in_z1 = 0;
-        in_z2 = 0;
-        out_z1 = 0;
-        out_z2 = 0;
-        q = 0.707;
-        freqc = 100;
-        type = 0;
-        fs = 44100;
-        a0 = 1;
-        a1 = 0;
-        a2 = 0;
-        b1 = 0;
-        b2 = 0;
+        
     }
 
     void init(float sampleRate, int filterType, float eckfreq, float guete)

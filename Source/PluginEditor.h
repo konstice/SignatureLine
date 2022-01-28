@@ -20,6 +20,14 @@ class KennlinieAudioProcessorEditor : public juce::AudioProcessorEditor,
     private juce::Slider::Listener
 {
 public:
+    enum CurveType {
+        CT_ArcTan = 1,
+        CT_ArcTan2 = 2,
+        CT_Strange = 3,
+        CT_Lagrange = 4,
+        CT_Gaus = 5,
+        CT_Bypass = 16
+    };
     KennlinieAudioProcessorEditor (KennlinieAudioProcessor&);
     ~KennlinieAudioProcessorEditor() override;
 

@@ -7,6 +7,9 @@
   <MAINGROUP id="fSHSzj" name="Kennlinie">
     <GROUP id="{68219225-9617-FC2D-CED7-D032DFE890BD}" name="Source">
       <FILE id="qPfUgM" name="biquad.h" compile="0" resource="0" file="Source/biquad.h"/>
+      <FILE id="XHMD8E" name="genericbiquad.cpp" compile="1" resource="0"
+            file="Source/genericbiquad.cpp"/>
+      <FILE id="zsgwye" name="genericbiquad.h" compile="0" resource="0" file="Source/genericbiquad.h"/>
       <FILE id="qRdeDB" name="graph.h" compile="0" resource="0" file="Source/graph.h"/>
       <FILE id="nZyxxB" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>

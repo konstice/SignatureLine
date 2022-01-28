@@ -15,25 +15,25 @@ KennlinieAudioProcessorEditor::KennlinieAudioProcessorEditor (KennlinieAudioProc
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
 
-    kurvename.addItem("Bypass", 16);
-    kurvename.addItem("ArcTan", 1);
-    kurvename.addItem("ArcTan 2", 2);
-    kurvename.addItem("Strange", 3);
-    kurvename.addItem("La Grange", 4);
-    kurvename.addItem("Gaus", 5);
-    kurvename.setSelectedId(16);
+    kurvename.addItem("Bypass", CT_Bypass);
+    kurvename.addItem("ArcTan", CT_ArcTan);
+    kurvename.addItem("ArcTan 2", CT_ArcTan2);
+    kurvename.addItem("Strange", CT_Strange);
+    kurvename.addItem("La Grange", CT_Lagrange);
+    kurvename.addItem("Gaus", CT_Gaus);
+    kurvename.setSelectedId(CT_Bypass);
     addAndMakeVisible(&kurvename);
     kurvename.onChange = [this] {audioProcessor.art = kurvename.getSelectedId();};
     //kurvename.addListener(this);
 
-    filterType.addItem("Bypass", 16);
-    filterType.addItem("LPF", 1);
-    filterType.addItem("HPF", 2);
-    filterType.addItem("BPF", 3);
-    filterType.addItem("BPS", 4);
-    filterType.setSelectedId(16);
+    filterType.addItem("Bypass", GenericBiquad::FT_ByPass);
+    filterType.addItem("LPF", GenericBiquad::FT_LowPass);
+    filterType.addItem("HPF", GenericBiquad::FT_HighPass);
+    filterType.addItem("BPF", GenericBiquad::FT_BandPass);
+    filterType.addItem("BPS", GenericBiquad::FT_BandStop);
+    filterType.setSelectedId(GenericBiquad::FT_ByPass);
     addAndMakeVisible(&filterType);
-    filterType.onChange = [this] {audioProcessor.filterType = filterType.getSelectedId();};
+    filterType.onChange = [this] {audioProcessor.filterType = static_cast<GenericBiquad::FilterType>(filterType.getSelectedId());};
 
     addAndMakeVisible(sync_x);
     sync_x.onClick = [this]

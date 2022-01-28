@@ -10,7 +10,7 @@
 
 #include <JuceHeader.h>
 #include "graph.h"
-#include "biquad.h"
+#include "genericbiquad.h"
 
 //==============================================================================
 /**
@@ -33,7 +33,7 @@ public:
 
     int art = 2;
 
-    int filterType=16;
+    GenericBiquad::FilterType filterType = GenericBiquad::FT_ByPass;
 
     float freqc=100;
     float q_value=0.707;
@@ -87,12 +87,10 @@ public:
         return 20 * log10(input);
     }
 
-    BiQuad filterL, filterR;
+    GenericBiquad filterL, filterR;
 private:
 
     float lagrange(double* x, double* y, int n, float xbar);
-    
-    void setFilter(BiQuad input);
 
     juce::Point<int> editorSize = { 600, 500 };
 

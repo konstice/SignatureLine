@@ -22,8 +22,8 @@ KennlinieAudioProcessor::KennlinieAudioProcessor()
                        )
 #endif
 {
-    filterL.init(getSampleRate(), filterType, freqc, q_value);
-    filterR.init(getSampleRate(), filterType, freqc, q_value);
+    filterL = GenericBiquad(getSampleRate());
+    filterR = GenericBiquad(getSampleRate());
 }
 
 KennlinieAudioProcessor::~KennlinieAudioProcessor()
@@ -101,8 +101,8 @@ void KennlinieAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
     buffer_stelle = 0;
 
-    filterL.init(getSampleRate(), filterType, freqc, q_value);
-    filterR.init(getSampleRate(), filterType, freqc, q_value);
+    filterL = GenericBiquad(sampleRate);
+    filterR = GenericBiquad(sampleRate);
 }
 
 void KennlinieAudioProcessor::releaseResources()
@@ -110,8 +110,8 @@ void KennlinieAudioProcessor::releaseResources()
     buffer_stelle = 0;
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
-    filterL.reset();
-    filterR.reset();
+    filterL.resetBiquad();
+    filterR.resetBiquad();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -173,13 +173,19 @@ void KennlinieAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
             if (channel == 0)
             {
-                filterL.init(getSampleRate(), filterType, freqc, q_value);
-                *puffer = filterL.process(*puffer);
+                filterL.setCornerFrequency(freqc);
+                filterL.setType(filterType);
+                filterL.setQuality(q_value);
+                filterL.setSampleRate(getSampleRate());
+                *puffer = filterL.processAudio(*puffer);
             }
             else if (channel == 1)
             {
-                filterR.init(getSampleRate(), filterType, freqc, q_value);
-                *puffer = filterR.process(*puffer);
+                filterR.setCornerFrequency(freqc);
+                filterR.setType(filterType);
+                filterR.setQuality(q_value);
+                filterR.setSampleRate(getSampleRate());
+                *puffer = filterR.processAudio(*puffer);
             }
 
             *puffer = processingKurve(*puffer);
@@ -261,7 +267,7 @@ float KennlinieAudioProcessor::processingKurve(float input)
     float output=0;
     {
         switch (art) {
-        case 1:
+        case KennlinieAudioProcessorEditor::CT_ArcTan:
         {
             if (y_value==0)
             {
@@ -273,7 +279,7 @@ float KennlinieAudioProcessor::processingKurve(float input)
             }
             break;
         }
-        case 2:
+        case KennlinieAudioProcessorEditor::CT_ArcTan2:
         {
             if (y_value == 0) {
                 output = input;
@@ -294,7 +300,7 @@ float KennlinieAudioProcessor::processingKurve(float input)
             //output = zaehler / nenner;
             break;
         }
-        case 3:
+        case KennlinieAudioProcessorEditor::CT_Strange:
         {
             if (y_value == 0)
             {
@@ -310,7 +316,7 @@ float KennlinieAudioProcessor::processingKurve(float input)
             }
             break;
         }
-        case 4:
+        case KennlinieAudioProcessorEditor::CT_Lagrange:
         {
             x_value = abs(x_value);
             y_value = abs(y_value);
@@ -378,7 +384,7 @@ float KennlinieAudioProcessor::processingKurve(float input)
             }
             break;
         }
-        case 5:
+        case KennlinieAudioProcessorEditor::CT_Gaus:
         {
             if (y_value == 0)
             {
@@ -428,14 +434,6 @@ float KennlinieAudioProcessor::lagrange(double* x, double* y, int n, float xbar)
         fx += l * y[i];
     }
     return (fx);
-}
-
-void KennlinieAudioProcessor::setFilter(BiQuad input)
-{
-    /*input.setSampleRate(getSampleRate());
-    input.setFreq(freqc);
-    input.setQ(q_value);
-    input.setType(filterType);*/
 }
 
 //==============================================================================
